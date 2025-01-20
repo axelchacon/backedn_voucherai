@@ -16,6 +16,10 @@ export class VouchersService {
 
     try {
       const aiResponse = await this.callGroqAI(image);
+      // Manejo de respuesta de la IA
+      if (!aiResponse) {
+        throw new BadRequestException('No se pudo obtener datos de la IA.');
+      }
       let aiResult;
       try {
         aiResult = JSON.parse(aiResponse);
@@ -61,7 +65,8 @@ export class VouchersService {
       });
     } catch (error) {
       throw new BadRequestException(
-        `Error al procesar la imagen: ${error.message}`,
+        //`Error al procesar la imagen: ${error.message}`,
+        'Upps, No pudimos procesar la imagen. Inténtalo nuevamente subiendo otra imagen o la misma imagen.La imagen de ser de una boleta de pago o voucher de pago',
       );
     }
   }
@@ -90,7 +95,7 @@ export class VouchersService {
           type: 'function',
           function: {
             name: 'get_data',
-            description: 'Get the information from voucher ',
+            description: 'Get the information from voucher o payment ',
             parameters: {
               type: 'object',
               properties: {
@@ -121,7 +126,8 @@ export class VouchersService {
                 },
                 resultimage: {
                   type: 'string',
-                  description: 'the type from the image',
+                  description: 'the type from the image if is a payment or not',
+                  enum: ['payments', 'no es payments'],
                 },
               },
               required: [
