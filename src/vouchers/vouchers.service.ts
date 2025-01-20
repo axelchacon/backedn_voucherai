@@ -1,26 +1,51 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { CreateVoucherDto } from './dto/create-voucher.dto';
 import { UpdateVoucherDto } from './dto/update-voucher.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class VouchersService {
-  create(createVoucherDto: CreateVoucherDto) {
-    return 'This action adds a new voucher';
+  constructor(private prismaService: PrismaService) {}
+  async create(createVoucherDto: CreateVoucherDto) {
+    try {
+      return await this.prismaService.imagevoucher.create({
+        data: createVoucherDto,
+      });
+    } catch (error) {
+      // Handle specific Prisma errors
+
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        throw new BadRequestException(error.message);
+      }
+
+      // Handle general errors
+      throw new BadRequestException(
+        `'An ${error} occurred while creating the voucher. Please try again.'`,
+      );
+    }
   }
 
   findAll() {
-    return `This action returns all vouchers`;
+    return this.prismaService.imagevoucher.findMany();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} voucher`;
+    return this.prismaService.imagevoucher.findUnique({
+      where: { id },
+    });
   }
 
   update(id: number, updateVoucherDto: UpdateVoucherDto) {
-    return `This action updates a #${id} voucher`;
+    return this.prismaService.imagevoucher.update({
+      where: { id },
+      data: updateVoucherDto,
+    });
   }
 
   remove(id: number) {
-    return `This action removes a #${id} voucher`;
+    return this.prismaService.imagevoucher.delete({
+      where: { id },
+    });
   }
 }

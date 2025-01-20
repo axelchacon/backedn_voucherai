@@ -13,3 +13,7 @@
 ### npx prisma studio
 
 #### Paso 2: Conectando nuestra base de datos de Prisma y Suapase con NestJS
+
+## npx nest g service prisma --no-spec
+
+## npm install @prisma/client
