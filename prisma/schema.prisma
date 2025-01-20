@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -15,11 +9,19 @@ datasource db {
 }
 
 model Imagevoucher {
-  id    Int     @default(autoincrement()) @id
-  image String  
-  resultimage  String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  
+  id            Int      @default(autoincrement()) @id
+  image         String
+  resultimage   String?
+  money         Float?   // Representa valores numéricos con decimales
+  date          String?   // Representa la fecha en formato de texto
+  medio_payment String?   // Medio de pago (e.g., "Tarjeta", "Yape")
+  name_person   String?   // Nombre de la persona
+  operation     String?   // Número o código de operación
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
+
+
+
+//{"date": "2025-01-17", "medio_payment": "Yape", "money": 100, "name_person": "Carmen M. Ventocilla E.", "operation": "04047687"}

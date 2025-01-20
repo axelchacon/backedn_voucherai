@@ -17,3 +17,7 @@
 ## npx nest g service prisma --no-spec
 
 ## npm install @prisma/client
+
+## npm install --save-dev @types/node-fetch
+
+## npx prisma migrate dev --name update_imagevoucher_schema
