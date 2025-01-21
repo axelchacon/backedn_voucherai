@@ -1,6 +1,11 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateVoucherDto } from './dto/create-voucher.dto';
+import { UpdateVoucherDto } from './dto/update-voucher.dto';
 import fetch from 'node-fetch';
 
 @Injectable()
@@ -156,5 +161,42 @@ export class VouchersService {
 
     const result = await response.json();
     return result.choices[0].message.tool_calls[0].function.arguments || null; //{"money": 100, "date": "17 ene. 2025 - 10:50 am", "resultimage": "image of receipt", "operation": "90909090", "medio_payment": "Yape", "name_person": "Carmen M. Ventocilla E."}
+  }
+
+  async findAll() {
+    return await this.prismaService.imagevoucher.findMany();
+  }
+
+  async findOne(id: number) {
+    const voucher = await this.prismaService.imagevoucher.findUnique({
+      where: { id },
+    });
+
+    if (!voucher) {
+      throw new NotFoundException('Voucher no encontrado.');
+    }
+
+    return voucher;
+  }
+
+  async update(id: number, updateVoucherDto: UpdateVoucherDto) {
+    try {
+      return await this.prismaService.imagevoucher.update({
+        where: { id },
+        data: updateVoucherDto,
+      });
+    } catch (error) {
+      throw new BadRequestException('No se pudo actualizar el voucher.');
+    }
+  }
+
+  async remove(id: number) {
+    try {
+      return await this.prismaService.imagevoucher.delete({
+        where: { id },
+      });
+    } catch (error) {
+      throw new BadRequestException('No se pudo eliminar el voucher.');
+    }
   }
 }
