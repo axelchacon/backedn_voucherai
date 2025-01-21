@@ -76,14 +76,14 @@ export class VouchersService {
     const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
     const payload = {
-      model: 'llama-3.2-11b-vision-preview',
+      model: 'llama-3.2-90b-vision-preview',
       messages: [
         {
           role: 'user',
           content: [
             {
               type: 'text',
-              text: 'De la imagen de boleta de pago, cuál es monto , la fecha de la operación, tipo de imagen (resultimage),el número de la operación, el medio de pago (que es una empresa fintech o banco) y mi nombre?',
+              text: 'Cuáles son los datos más importantes de la imagen que te estoy dando? ',
             },
             { type: 'image_url', image_url: { url: imageUrl } },
           ],
